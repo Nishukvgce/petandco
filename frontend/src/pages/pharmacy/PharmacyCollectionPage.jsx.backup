@@ -1,0 +1,153 @@
+import React, { useEffect } from 'react';
+import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import Header from '../../components/ui/Header';
+import { useCart } from '../../contexts/CartContext';
+
+const slugify = (s = '') => String(s || '').toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+
+const normalizeForParam = (s = '') => String(s || '')
+  .toLowerCase()
+  .replace(/\s+/g, '-')
+  .replace(/[^\w-]/g, '');
+
+const PharmacyCollectionPage = ({ subLabel }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // sample products for pharmacy listing (fallback)
+  const sampleProducts = [
+    { id: 'ph1', name: 'Clumping Cat Litter', image: '/assets/images/essential/meowsi.webp', badges: ['Absorbent'], variants: ['5 L','10 L'], price: 499, original: null },
+    { id: 'ph2', name: 'Durable Litter Tray', image: '/assets/images/essential/whiskas.webp', badges: ['Easy Clean'], variants: ['Small','Large'], price: 899, original: 999 },
+    { id: 'ph3', name: 'Scooper with Filter', image: '/assets/images/essential/sheba.webp', badges: ['Handy'], variants: ['One Size'], price: 149, original: null },
+    { id: 'ph4', name: 'Probiotic Gut Supplement', image: '/assets/images/essential/meowsi.webp', badges: ['Gut Health'], variants: ['30 Caps'], price: 699, original: 799 },
+  ];
+
+  const navigate = useNavigate();
+  const { addToCart, addToWishlist, isInWishlist, removeFromWishlist } = useCart();
+
+  const location = useLocation();
+  const pathname = String(location?.pathname || '').toLowerCase();
+  const isDogPath = pathname.includes('/pharmacy/dogs');
+  const isCatPath = pathname.includes('/pharmacy/cats');
+  const isMedicinesPath = pathname.includes('/pharmacy/medicines');
+  const isSupplementsPath = pathname.includes('/pharmacy/supplements');
+  const isPrescriptionPath = pathname.includes('/pharmacy/prescription-food') || pathname.includes('/pharmacy/prescription');
+
+  const categories = isDogPath
+    ? ['Medicines for Skin', 'Joint & Mobility', 'Digestive Care', 'All Dog Pharmacy']
+    : isCatPath
+    ? ['Skin & Coat Care', 'Worming', 'Oral Care', 'All Cat Pharmacy']
+    : ['Medicines', 'Supplements', 'Prescription Food', 'All Pharmacy'];
+
+  const handleClickCategory = (label) => {
+    const next = new URLSearchParams(searchParams.toString());
+    next.set('sub', slugify(label));
+    setSearchParams(next);
+  };
+
+  const ProductCard = ({ p }) => {
+    const selectedVariant = (p?.variants || [null])[0] || null;
+    return (
+      <article className="bg-white rounded-lg border border-border overflow-hidden shadow-sm">
+        <div className="p-3">
+          <div className="h-8 flex items-center justify-start">
+            <div className="bg-green-500 text-white text-xs px-3 py-1 rounded-t-md">{p?.badges?.[0]}</div>
+          </div>
+
+          <button
+            onClick={() => navigate(`/product-detail-page?id=${p.id}`)}
+            className="mt-3 h-44 flex items-center justify-center bg-[#f6f8fb] rounded w-full"
+          >
+            <img src={p?.image} alt={p?.name} className="max-h-40 object-contain" />
+          </button>
+
+          <h3
+            onClick={() => navigate(`/product-detail-page?id=${p.id}`)}
+            className="mt-3 text-sm font-semibold text-foreground cursor-pointer"
+          >
+            {p?.name}
+          </h3>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {(p?.variants || []).map((v, i) => (
+              <button
+                key={i}
+                className={`text-xs px-2 py-1 border border-border rounded ${selectedVariant === v ? 'bg-green-600 text-white' : 'bg-white'}`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-4 flex items-center justify-between">
+            <div>
+              <div className="text-lg font-bold">₹{(Number(p?.price) || 0).toFixed(2)}</div>
+              {p?.original && <div className="text-sm text-muted-foreground line-through">₹{p.original}</div>}
+            </div>
+
+            <div className="flex flex-col items-end gap-2">
+              <button
+                onClick={() => addToCart({ id: p.id, name: p.name, price: p.price }, 1)}
+                className="bg-orange-500 text-white px-4 py-2 rounded-full"
+              >
+                Add
+              </button>
+
+              <button
+                onClick={() => (isInWishlist(p.id) ? removeFromWishlist(p.id) : addToWishlist({ id: p.id, name: p.name, price: p.price }))}
+                className="text-xs text-muted-foreground"
+              >
+                {isInWishlist(p.id) ? 'Remove ♥' : 'Wishlist ♡'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-12 gap-6">
+          <aside className="col-span-12 md:col-span-3 lg:col-span-2">
+            <div className="bg-white rounded border border-border p-3">
+              <h3 className="text-sm font-semibold mb-2">{(subLabel || 'Pharmacy').toUpperCase()}</h3>
+              <ul className="space-y-2">
+                {categories.map((c) => {
+                  const active = (searchParams.get('sub') || '') === slugify(c);
+                  return (
+                    <li key={c}>
+                      <button
+                        onClick={() => handleClickCategory(c)}
+                        className={`w-full text-left px-2 py-2 rounded flex items-center gap-3 ${active ? 'bg-[#fff6ee] ring-1 ring-orange-300' : 'hover:bg-gray-50'}`}>
+                        <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm">{c.split(' ').slice(0,2).map(x=>x[0]).join('')}</span>
+                        <span className="text-sm">{c}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </aside>
+
+          <section className="col-span-12 md:col-span-9 lg:col-span-10">
+            <h1 className="text-2xl font-heading font-bold">{subLabel || 'Pharmacy'}</h1>
+            <p className="text-sm text-muted-foreground mt-2 mb-4">Select a category from the left to filter the pharmacy products.</p>
+
+            {/* Product grid (2-column on mobile, 4 on md+) */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {sampleProducts.map((p) => (
+                <ProductCard key={p.id} p={p} />
+              ))}
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default PharmacyCollectionPage;
+
+

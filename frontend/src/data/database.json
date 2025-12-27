@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "siteName": "PET&CO",
+    "currency": "INR",
+    "shippingFee": 50,
+    "freeShippingThreshold": 500,
+    "taxRate": 0.18,
+    "version": "1.0.0",
+    "lastUpdated": "2024-01-01T00:00:00Z"
+  },
+  "config": {
+    "apiBaseUrl": "http://localhost:8081/api",
+    "defaultImageUrl": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=400&fit=crop",
+    "fallbackImageUrl": "/assets/images/no_image.png",
+    "itemsPerPage": 12,
+    "maxCartItems": 50,
+    "sessionTimeout": 3600000
+  }
+}

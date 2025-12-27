@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Colors */
+    --color-background: #FEFCF8; /* warm off-white */
+    --color-foreground: #2D2D2D; /* warm charcoal */
+    --color-border: #F5F5F5; /* light gray */
+    --color-input: #FFFFFF; /* white */
+    --color-ring: #D4761A; /* turmeric orange */
+    
+    /* Card Colors */
+    --color-card: #FFFFFF; /* white */
+    --color-card-foreground: #2D2D2D; /* warm charcoal */
+    
+    /* Popover Colors */
+    --color-popover: #FFFFFF; /* white */
+    --color-popover-foreground: #2D2D2D; /* warm charcoal */
+    
+    /* Muted Colors */
+    --color-muted: #F5F5F5; /* light gray */
+    --color-muted-foreground: #6B6B6B; /* medium gray */
+    
+    /* Primary Colors */
+    --color-primary: #D4761A; /* turmeric orange */
+    --color-primary-foreground: #FFFFFF; /* white */
+    
+    /* Secondary Colors */
+    --color-secondary: #8B4513; /* cinnamon brown */
+    --color-secondary-foreground: #FFFFFF; /* white */
+    
+    /* Accent Colors */
+    --color-accent: #228B22; /* curry leaf green */
+    --color-accent-foreground: #FFFFFF; /* white */
+    
+    /* Success Colors */
+    --color-success: #22C55E; /* vibrant green */
+    --color-success-foreground: #FFFFFF; /* white */
+    
+    /* Warning Colors */
+    --color-warning: #F59E0B; /* amber orange */
+    --color-warning-foreground: #FFFFFF; /* white */
+    
+    /* Error/Destructive Colors */
+    --color-error: #DC2626; /* clear red */
+    --color-error-foreground: #FFFFFF; /* white */
+    --color-destructive: #DC2626; /* clear red */
+    --color-destructive-foreground: #FFFFFF; /* white */
+  }
+
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-body {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  
+  .font-caption {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .font-data {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .shadow-warm {
+    box-shadow: 0 1px 3px rgba(212, 118, 26, 0.1);
+  }
+  
+  .shadow-warm-md {
+    box-shadow: 0 4px 6px rgba(212, 118, 26, 0.1), 0 2px 4px rgba(212, 118, 26, 0.06);
+  }
+  
+  .shadow-warm-lg {
+    box-shadow: 0 10px 15px rgba(212, 118, 26, 0.1), 0 4px 6px rgba(212, 118, 26, 0.05);
+  }
+  
+  .shadow-warm-xl {
+    box-shadow: 0 20px 25px rgba(212, 118, 26, 0.1), 0 10px 10px rgba(212, 118, 26, 0.04);
+  }
+}

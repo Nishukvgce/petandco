@@ -1,0 +1,105 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter;
+}
+
+* {
+  box-sizing: border-box;
+  line-height: normal;
+  font-family: inherit;
+  margin: unset;
+}
+
+/* Prevent horizontal scroll caused by elements sized with 100vw or overflowing children */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Make images responsive by default */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* For very large screens (1920px and above) allow the hero banner to expand
+   to a 1920px centered layout so banners fill the main page without being
+   compressed by a narrower parent container. This keeps images at natural
+   aspect ratio (width:100% of the 1920px wrapper, height:auto). */
+@media (min-width: 1920px) {
+  .hero-1920 {
+    max-width: 1920px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-1920 img {
+    width: 100% !important;
+    height: auto !important;
+    max-width: none !important;
+    object-fit: cover; /* fills width while maintaining aspect; change to 'contain' if you want full image visible */
+  }
+}
+
+/* Gradient outline for search field without changing box size
+   Uses double background technique so border is a gradient while preserving
+   the element's inner size (no extra padding). */
+.gradient-outline{
+  border-radius:9999px;
+  border:2px solid transparent; /* required for background-clip trick */
+  background-image: linear-gradient(#ffffff,#ffffff), linear-gradient(90deg,#3b82f6,#ff7a00);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* subtle focus state */
+.gradient-outline:focus-within{
+  box-shadow: 0 6px 18px rgba(59,130,246,0.08);
+}
+
+/* Category rail (left column) styling for exact mobile reference appearance */
+.category-rail {
+  display: block;
+  padding-top: 0.25rem;
+}
+
+.category-rail ul { list-style: none; margin: 0; padding: 0; }
+
+.category-rail li { align-items: center; }
+
+.category-icon { border-radius: 9999px; overflow: hidden; flex-shrink: 0; }
+
+.category-label { padding-left: 0.25rem; }
+
+.category-right-border { width: 4px; height: 48px; border-radius: 2px; margin-left: 0.5rem; }
+
+.category-rail li[data-active="true"] { background: rgba(255,131,62,0.06); }
+.category-rail li[data-active="true"] .category-icon { box-shadow: 0 0 0 4px rgba(255,122,0,0.06); }
+
+/* Product grid section visual divider (tall orange line left of grid) */
+.product-grid-section { position: relative; }
+.product-grid-section::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: transparent; /* default transparent; active item shows small accents */
+}
+
+/* Make product grid 2 columns on small screens exactly (matches reference 2x2 layout) */
+@media (max-width: 767px) {
+  .product-grid-section .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .category-rail { width: 6.5rem; }
+  .category-rail .category-icon { width: 56px; height: 56px; }
+  .category-rail li { padding: 0.5rem 0.75rem; }
+  .category-right-border { height: 56px; }
+}
+
+@media (min-width: 768px) {
+  .product-grid-section .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
