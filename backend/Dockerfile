@@ -41,11 +41,11 @@ COPY --from=builder /app/target/*.jar app.jar
 RUN mkdir -p uploads
 
 # Expose default port (Render provides $PORT at runtime)
-EXPOSE 8080
+EXPOSE 8081
 
 # Health check uses the runtime $PORT (falls back to 8080 if not provided)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
-  CMD sh -c 'PORT=${PORT:-8080}; curl -f http://localhost:$PORT/actuator/health || exit 1'
+  CMD sh -c 'PORT=${PORT:-8081}; curl -f http://localhost:$PORT/actuator/health || exit 1'
 
-# Run the jar; let Spring Boot pick up Render's $PORT (fallback to 8080) and use prod profile
-ENTRYPOINT ["sh", "-c", "java -Dspring.profiles.active=prod -Dserver.port=${PORT:-8080} -jar app.jar"]
+# Run the jar; let Spring Boot pick up Render's $PORT (fallback to 8081) and use prod profile
+ENTRYPOINT ["sh", "-c", "java -Dspring.profiles.active=prod -Dserver.port=${PORT:-8081} -jar app.jar"]
